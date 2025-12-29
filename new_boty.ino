@@ -24,8 +24,19 @@ int rightInput;
 
 
 void setup() {
-  Serial.begin(9600);
+  delay(5000); // wait 5 seconds to let people move away
+
+  setupPins()
   
+  digitalWrite(in1, 1);
+  digitalWrite(in2, 0);
+  digitalWrite(in3, 1);
+  digitalWrite(in4, 0);
+
+  Serial.begin(9600);
+}
+
+void setupPins(){
   pinMode(leftSensor, INPUT);
   pinMode(centerSensor, INPUT);
   pinMode(rightSensor, INPUT);
@@ -39,7 +50,6 @@ void setup() {
   pinMode(in4, OUTPUT);
 
   pinMode(enb, OUTPUT);
-  
 }
 
 void loop() {
@@ -54,25 +64,13 @@ void loop() {
   Serial.println(rightInput);
 
 
-  if (isBlack(leftInput)){
-    Serial.print("left motor off ");
-    leftMotorValue = false;
-  } else {
-    Serial.print("left motor on ");
-    leftMotorValue = true;
-  }
+  if (isBlack(leftInput))  { leftMotorValue = false;  } 
+  else                     { leftMotorValue = true;   }
 
-  if (isBlack(rightInput)){
-    Serial.print("right motor off ");
-    rightMotorValue = false;
-  } else {
-    Serial.print("right motor on ");
-    rightMotorValue = true;
-  }
+  if (isBlack(rightInput)) { rightMotorValue = false; }
+  else                     { rightMotorValue = true;  }
 
-  Serial.println();
-  Serial.println();
-  
+
   motor(leftMotorValue, rightMotorValue);
 }
 
@@ -88,4 +86,8 @@ void motor(int right_motor, int left_motor) {
 
   if (left_motor)  { analogWrite(enb, on);  }
   else             { analogWrite(enb, off); }
+}
+
+void TurnUntilMiddleSensor(bool direction, bool SwitchTrackDirection){
+  
 }
