@@ -12,7 +12,7 @@
 
 // defenitions for sensors and motor speeds
 int const black_line = 70;
-int const on = 150;
+int const on = 200;
 int const off = 0;
 // Values of on(true) and off(false) of the right and left motors
 bool rightMotorValue = false;
@@ -26,7 +26,7 @@ int rightInput;
 void setup() {
   delay(5000); // wait 5 seconds to let people move away
 
-  setupPins()
+  setupPins();
   
   digitalWrite(in1, 1);
   digitalWrite(in2, 0);
@@ -64,15 +64,37 @@ void loop() {
   Serial.println(rightInput);
 
 
-  if (isBlack(leftInput))  { leftMotorValue = false;  } 
-  else                     { leftMotorValue = true;   }
+  if (isBlack(leftInput))  
+  { 
+    leftMotorValue = false;  
+  }
+  else                     
+  { 
+    leftMotorValue = true;   
+  }
 
-  if (isBlack(rightInput)) { rightMotorValue = false; }
-  else                     { rightMotorValue = true;  }
+  if (isBlack(rightInput)) 
+  {
+    rightMotorValue = false; 
+  }
+  else                     
+  {
+    rightMotorValue = true;  
+  }
+  if (not isBlack(centerInput) and not isBlack(rightInput) and not isBlack(leftInput))
+  {
+  digitalWrite(in1, 0);
+  digitalWrite(in2, 1);
+  digitalWrite(in3, 0);
+  digitalWrite(in4, 1);
+  }
+  else
+  {
+  motor(leftMotorValue, rightMotorValue);not isBlack(centerInput);
+  }
 
-
-  motor(leftMotorValue, rightMotorValue);
-}
+  }
+  
 
 bool isBlack(int value) {
   if (value < black_line) { return true;  }
