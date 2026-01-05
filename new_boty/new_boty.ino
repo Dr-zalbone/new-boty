@@ -10,6 +10,9 @@
 #define centerSensor A1
 #define rightSensor A2
 
+#define LEFT true
+#define RIGHT false
+
 // speeds
 int const MOTOR_ON = 200;
 int const MOTOR_OFF = 0;
@@ -17,9 +20,9 @@ int const MOTOR_OFF = 0;
 bool rightMotorOn = false;
 bool leftMotorOn = false;
 
-int leftInput; 
-int centerInput;
-int rightInput;
+bool leftInput; 
+bool centerInput;
+bool rightInput;
 
 
 void setup() {
@@ -48,6 +51,14 @@ void setupPins(){
   pinMode(enb, OUTPUT);
 }
 
+
+void TurnUntilMiddle(bool direction){
+  while(!centerInput){
+    motor(!direction, direction);
+    centerInput = digitalRead(centerSensor);
+  }
+}
+
 void loop() {
   leftInput = digitalRead(leftSensor);
   centerInput = digitalRead(centerSensor);
@@ -59,8 +70,8 @@ void loop() {
   Serial.print("\t");
   Serial.println(rightInput);
 
-  leftMotorOn = !leftInput;
-  rightMotorOn = !rightInput;
+  if(leftInput)  { TurnUntilMiddle(LEFT);  }
+  if(rightInput) { TurnUntilMiddle(RIGHT); }
 
   motor(leftMotorOn, rightMotorOn);
 }
@@ -68,8 +79,4 @@ void loop() {
 void motor(bool right_motor, bool left_motor) {
   analogWrite(ena, right_motor ? MOTOR_ON : MOTOR_OFF);
   analogWrite(enb, left_motor ? MOTOR_ON : MOTOR_OFF);
-}
-
-void TurnUntilMiddleSensor(bool direction, bool SwitchTrackDirection){
-  
 }
