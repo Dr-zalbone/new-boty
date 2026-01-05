@@ -27,10 +27,10 @@ void setup() {
 
   setupPins();
   
-  digitalWrite(in1, 1);
-  digitalWrite(in2, 0);
-  digitalWrite(in3, 1);
-  digitalWrite(in4, 0);
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
 
   Serial.begin(9600);
 }
@@ -65,7 +65,7 @@ void loop() {
   motor(leftMotorOn, rightMotorOn);
 }
 
-void motor(int right_motor, int left_motor) {
+void motor(bool right_motor, bool left_motor) {
   analogWrite(ena, right_motor ? MOTOR_ON : MOTOR_OFF);
   analogWrite(enb, left_motor ? MOTOR_ON : MOTOR_OFF);
 }
