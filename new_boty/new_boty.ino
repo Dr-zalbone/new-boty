@@ -6,9 +6,9 @@
 #define in4 6
 #define enb 7
 
-#define leftSensor A0
-#define centerSensor A1
-#define rightSensor A2
+#define leftSensor 26
+#define centerSensor 27
+#define rightSensor 28
 
 #define LEFT true
 #define RIGHT false
