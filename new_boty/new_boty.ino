@@ -17,9 +17,6 @@
 int const MOTOR_ON = 200;
 int const MOTOR_OFF = 0;
 
-bool rightMotorOn = false;
-bool leftMotorOn = false;
-
 bool leftInput; 
 bool centerInput;
 bool rightInput;
@@ -55,14 +52,15 @@ void setupPins(){
 void TurnUntilMiddle(bool direction){
   while(!centerInput){
     motor(!direction, direction);
-    centerInput = digitalRead(centerSensor);
+    centerInput = !digitalRead(centerSensor);
+    Serial.print(centerInput);
   }
 }
 
 void loop() {
-  leftInput = digitalRead(leftSensor);
-  centerInput = digitalRead(centerSensor);
-  rightInput = digitalRead(rightSensor);
+  leftInput   = !digitalRead(leftSensor);
+  centerInput = !digitalRead(centerSensor);
+  rightInput  = !digitalRead(rightSensor);
 
   Serial.print(leftInput);
   Serial.print("\t");
@@ -73,7 +71,7 @@ void loop() {
   if(leftInput)  { TurnUntilMiddle(LEFT);  }
   if(rightInput) { TurnUntilMiddle(RIGHT); }
 
-  motor(leftMotorOn, rightMotorOn);
+  motor(true, true);
 }
 
 void motor(bool right_motor, bool left_motor) {
