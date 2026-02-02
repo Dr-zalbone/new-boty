@@ -21,6 +21,8 @@ bool leftInput;
 bool centerInput;
 bool rightInput;
 
+// motor
+bool timeLimit;
 
 void setup() {
   delay(5000); // wait 5 seconds to let people move away
@@ -48,17 +50,19 @@ void setupPins(){
   pinMode(enb, OUTPUT);
 }
 
-
-void TurnUntilMiddle(bool direction, bool reverseTrackDirection = false){
-  if (reverseTrackDirection) {
-    digitalWrite(direction ? in3 : in1, LOW);
-    digitalWrite(direction ? in4 : in2, HIGH);
-  }
-  
-  while(!centerInput){
+void TurnUntilMiddle(bool direction){
+  unsigned long start = millis()
+  timeLimit = false;
+  while(!centerInput && !timeLimit){
     motor(!direction, direction);
     centerInput = !digitalRead(centerSensor);
-    // Serial.print(centerInput);
+
+    if(millis() - start > 3000) { timeLimit  = true; }
+  }
+  if (timeLimit) {
+    while(!centerInput){
+      motor(true, true);
+    }
   }
 }
 
@@ -72,9 +76,9 @@ void loop() {
   // Serial.print(centerInput);
   // Serial.print("\t");
   // Serial.println(rightInput);
-
-  if(leftInput)  { TurnUntilMiddle(LEFT,  false); }
-  if(rightInput) { TurnUntilMiddle(RIGHT, false); }
+  
+  if(leftInput)  { TurnUntilMiddle(LEFT);  }
+  if(rightInput) { TurnUntilMiddle(RIGHT); }
 
   motor(true, true);
 }
