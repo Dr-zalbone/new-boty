@@ -32,7 +32,7 @@ void setup() {
   digitalWrite(in3, HIGH);
   digitalWrite(in4, LOW);
 
-  Serial.begin(9600);
+  // Serial.begin(9600);
 }
 
 void setupPins(){
@@ -49,11 +49,16 @@ void setupPins(){
 }
 
 
-void TurnUntilMiddle(bool direction){
+void TurnUntilMiddle(bool direction, bool reverseTrackDirection = false){
+  if (reverseTrackDirection) {
+    digitalWrite(direction ? in3 : in1, LOW);
+    digitalWrite(direction ? in4 : in2, HIGH);
+  }
+  
   while(!centerInput){
     motor(!direction, direction);
     centerInput = !digitalRead(centerSensor);
-    Serial.print(centerInput);
+    // Serial.print(centerInput);
   }
 }
 
@@ -62,14 +67,14 @@ void loop() {
   centerInput = !digitalRead(centerSensor);
   rightInput  = !digitalRead(rightSensor);
 
-  Serial.print(leftInput);
-  Serial.print("\t");
-  Serial.print(centerInput);
-  Serial.print("\t");
-  Serial.println(rightInput);
+  // Serial.print(leftInput);
+  // Serial.print("\t");
+  // Serial.print(centerInput);
+  // Serial.print("\t");
+  // Serial.println(rightInput);
 
-  if(leftInput)  { TurnUntilMiddle(LEFT);  }
-  if(rightInput) { TurnUntilMiddle(RIGHT); }
+  if(leftInput)  { TurnUntilMiddle(LEFT,  false); }
+  if(rightInput) { TurnUntilMiddle(RIGHT, false); }
 
   motor(true, true);
 }
