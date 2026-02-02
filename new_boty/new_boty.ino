@@ -14,7 +14,9 @@
 #define RIGHT false
 
 // speeds
-int const MOTOR_ON = 200;
+
+int const MOTOR_ON_TURNING = 220;
+int const MOTOR_ON = 180;
 int const MOTOR_OFF = 0;
 
 bool leftInput; 
@@ -23,6 +25,7 @@ bool rightInput;
 
 // motor
 bool timeLimit;
+int speed;
 
 void setup() {
   delay(5000); // wait 5 seconds to let people move away
@@ -50,18 +53,25 @@ void setupPins(){
   pinMode(enb, OUTPUT);
 }
 
+void motor(bool right_motor, bool left_motor, bool turning = false) {
+  speed = turning ? MOTOR_ON : MOTOR_ON_TURNING;
+  analogWrite(ena, right_motor ? MOTOR_ON : MOTOR_OFF);
+  analogWrite(enb, left_motor ? MOTOR_ON : MOTOR_OFF);
+}
+
 void TurnUntilMiddle(bool direction){
   unsigned long start = millis();
   timeLimit = false;
   while(!centerInput && !timeLimit){
-    motor(!direction, direction);
+    motor(!direction, direction, true);
     centerInput = !digitalRead(centerSensor);
 
-    if(millis() - start > 3000) { timeLimit  = true; }
+    if(millis() - start > 4000) { timeLimit  = true; }
   }
   if (timeLimit) {
     while(!centerInput){
       motor(true, true);
+      centerInput = !digitalRead(centerSensor);
     }
   }
 }
@@ -81,9 +91,4 @@ void loop() {
   if(rightInput) { TurnUntilMiddle(RIGHT); }
 
   motor(true, true);
-}
-
-void motor(bool right_motor, bool left_motor) {
-  analogWrite(ena, right_motor ? MOTOR_ON : MOTOR_OFF);
-  analogWrite(enb, left_motor ? MOTOR_ON : MOTOR_OFF);
 }
