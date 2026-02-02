@@ -51,7 +51,7 @@ void setupPins(){
 }
 
 void TurnUntilMiddle(bool direction){
-  unsigned long start = millis()
+  unsigned long start = millis();
   timeLimit = false;
   while(!centerInput && !timeLimit){
     motor(!direction, direction);
